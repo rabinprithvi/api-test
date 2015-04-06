@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -51,4 +51,16 @@ group :development, :test do
   gem 'spring'
 
   gem 'bootstrap-sass'
+
+  gem 'rspec-rails', '~> 3.0'
+
+  gem 'vcr', '~> 2.9.3'
+
+  gem 'webmock', '~> 1.21.0'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'launchy'
 end
