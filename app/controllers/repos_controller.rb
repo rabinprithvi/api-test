@@ -1,25 +1,18 @@
 class ReposController < ApplicationController
-  require 'faraday_middleware'
-  require 'hashie/mash'
+  require 'api_connector'
+
   def index
-    ## in Faraday 0.8 or above:
-    connection = Faraday.new 'https://api.github.com/' do |conn|
-      conn.request :json
-      conn.response :json, :content_type => /\bjson$/
-      conn.use Faraday::Response::Mashify
-      conn.adapter Faraday.default_adapter
-    end
-    response = connection.get 'orgs/ideas2it/repos'
-    result =  response.body
+    response =  api_connector.get REPO_URL
     @repos = []
-    result.each do |data|
-      mashie = Hashie::Mash.new data
+    response.body.each do |data|
       repo = Repo.new
-      repo.name = mashie.name
-      repo.description = mashie.description
-      repo.language = mashie.language
-      repo.watchers = mashie.watchers
+      repo.parse data
       @repos << repo
     end
+  end
+
+  private
+  def api_connector
+    ApiConnector.new
   end
 end
